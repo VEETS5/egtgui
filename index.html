@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>EGT Monitor</title>
+    <script src="renderer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
          body {
@@ -29,79 +30,9 @@
         <!-- Add a paragraph for displaying messages -->
         <p id="info"></p>
     </div>
-    <script>    
-        document.getElementById('calibrationSetOn').addEventListener('click', () => {
-            window.electronAPI.startCalibration();
-        });
-        
-        document.getElementById('calibrationSetOff').addEventListener('click', () => {
-            window.electronAPI.endCalibration();
-        });
-    
-        window.electronAPI.onCalibrationResponse((event, message) => {
-            console.log(message);
-            document.getElementById('info').textContent = message;
-        });
-    </script>
     <div id="right-panel">
         <h1>Live Data Graph</h1>
         <canvas id="liveGraph"></canvas>
     </div>
-    <script>
-        const ctx = document.getElementById('liveGraph').getContext('2d');
-        const liveGraph = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Temperature (Fahrenheit)',
-                    data: [],
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: false
-                    }
-                }
-            }
-        });
-
-        // Function to update the graph with new data
-        async function updateGraph() {
-            try {
-                const response = await fetch('http://localhost:3000/temps');
-                const data = await response.json();
-                const temperature = data.temperature; // Use the key that your server sends back
-                
-                // Add time as a label for each data point
-                const now = new Date();
-                const label = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-                
-                // Add the new data to the chart data arrays
-                liveGraph.data.labels.push(label);
-                liveGraph.data.datasets.forEach((dataset) => {
-                    dataset.data.push(temperature);
-                });
-                
-                // Remove old data to prevent the chart from becoming too cluttered
-                if (liveGraph.data.labels.length > 30) { // Adjust this value as needed
-                    liveGraph.data.labels.shift();
-                    liveGraph.data.datasets.forEach((dataset) => {
-                        dataset.data.shift();
-                    });
-                }
-                
-                // Update the chart
-                liveGraph.update();
-            } catch (error) {
-                console.error('Error fetching temperature data:', error);
-            }
-        }
-        // Fetch new data every 100ms and update the chart
-        setInterval(updateGraph, 1000);
-    </script>
 </body>
 </html>
