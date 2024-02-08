@@ -13,14 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('info').textContent = message;
     });
     
+    const initialDataCount = 15;
+    const initialData = Array(initialDataCount).fill(0);
+    const initialLabels = Array(initialDataCount).fill('').map((_, i) => i.toString()); 
     const ctx = document.getElementById('liveGraph').getContext('2d');
     const liveGraph = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: [],
+            labels: initialLabels,
             datasets: [{
                 label: 'Temperature (Fahrenheit)',
-                data: [],
+                data: initialData,
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1
             }]
@@ -42,18 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const now = new Date();
             const label = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
-            // Directly use the 'liveGraph' instance declared outside this function
-            liveGraph.data.labels.push(label);
-            liveGraph.data.datasets.forEach((dataset) => {
-                dataset.data.push(temperature);
-            });
+            initialData.shift();
+            initialData.push(temperature);
 
-            if (liveGraph.data.labels.length > 10) {
-                liveGraph.data.labels.shift();
-                liveGraph.data.datasets.forEach((dataset) => {
-                    dataset.data.shift();
-                });
-            }
+            liveGraph.data.labels.shift();
+            liveGraph.data.labels.push(label);
 
             liveGraph.update();
         } catch (error) {
