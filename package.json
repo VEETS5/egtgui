@@ -1,0 +1,21 @@
+{
+  "name": "egtgui",
+  "version": "1.0.0",
+  "description": "frontendgui",
+  "main": "main.js",
+  "scripts": {
+    "start": "node startApp.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "vito and elijah",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.2.1"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "body-parser": "^1.20.2",
+    "chart.js": "^4.4.1",
+    "express": "^4.18.2"
+  }
+}
