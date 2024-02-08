@@ -14,47 +14,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     const ctx = document.getElementById('liveGraph').getContext('2d');
-        const liveGraph = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Temperature (Fahrenheit)',
-                    data: [],
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: false
-                    }
+    const liveGraph = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Temperature (Fahrenheit)',
+                data: [],
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false
                 }
             }
-        });
+        }
+    });
 
     async function updateGraph() {
         try {
             const data = await window.electronAPI.fetchTemperatureData();
             const temperature = data.temperature;
-            
+
             const now = new Date();
-            const label = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-            
-            const liveGraph = Chart.getChart("liveGraph"); // Access the chart instance
+            const label = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+
+            // Directly use the 'liveGraph' instance declared outside this function
             liveGraph.data.labels.push(label);
             liveGraph.data.datasets.forEach((dataset) => {
                 dataset.data.push(temperature);
             });
-            
-            if (liveGraph.data.labels.length > 30) {
+
+            if (liveGraph.data.labels.length > 10) {
                 liveGraph.data.labels.shift();
                 liveGraph.data.datasets.forEach((dataset) => {
                     dataset.data.shift();
                 });
             }
-            
+
             liveGraph.update();
         } catch (error) {
             console.error('Error fetching temperature data:', error);
