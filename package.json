@@ -4,7 +4,7 @@
   "description": "frontendgui",
   "main": "main.js",
   "scripts": {
-    "start": "node startApp.js",
+    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "vito and elijah",
