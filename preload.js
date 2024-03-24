@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+
 contextBridge.exposeInMainWorld('electronAPI', {
     startCalibration: () => ipcRenderer.send('calibration-start'),
     endCalibration: () => ipcRenderer.send('calibration-end'),

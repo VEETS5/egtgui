@@ -20,19 +20,29 @@
             flex: 2;
             padding: 20px;
         }
+        #status-icon {
+            width: 50px; 
+            height: auto;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
     </style>
 </head>
 <body>
     <div id="left-panel">
+        <img id="status-icon" src="/egtgui/src/good_status.png"/>
         <h1>Configuration</h1>
         <button id="calibrationSetOn">Start Calibration</button>
         <button id="calibrationSetOff">End Calibration</button>
-        <!-- Add a paragraph for displaying messages -->
         <p id="info"></p>
     </div>
     <div id="right-panel">
-        <h1>Live Data Graph</h1>
-        <canvas id="liveGraph"></canvas>
+        <h1>Live Data Graphs</h1>
+        <canvas id="liveGraph1"></canvas>
+        <canvas id="liveGraph2"></canvas>
+        <canvas id="liveGraph3"></canvas>
+        <canvas id="liveGraph4"></canvas>
     </div>
 </body>
 </html>

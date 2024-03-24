@@ -12,22 +12,33 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('info').textContent = message;
     });
 
-    window.electronAPI.onTemperatureUpdate((event, temperature) => {
-        console.log('Received temperature:', temperature);
-        document.getElementById('temperatureDisplay').textContent = `Latest Temperature: ${temperature}°C`;
+    window.electronAPI.onTemperatureUpdate((event, data) => {
+        const { cylinder1, cylinder2, cylinder3, cylinder4 } = data;
+        console.log('Received temperatures:', cylinder1, cylinder2, cylinder3, cylinder4);
+        updateGraphs(cylinder1, cylinder2, cylinder3, cylinder4);
     });
 
     const initialDataCount = 15;
-    const initialData = Array(initialDataCount).fill(0);
+    const initialData = {
+        cylinder1: Array(initialDataCount).fill(0),
+        cylinder2: Array(initialDataCount).fill(0),
+        cylinder3: Array(initialDataCount).fill(0),
+        cylinder4: Array(initialDataCount).fill(0),
+    };
     const initialLabels = Array(initialDataCount).fill('').map((_, i) => i.toString());
-    const ctx = document.getElementById('liveGraph').getContext('2d');
-    const liveGraph = new Chart(ctx, {
+
+    const ctx1 = document.getElementById('liveGraph1').getContext('2d');
+    const ctx2 = document.getElementById('liveGraph2').getContext('2d');
+    const ctx3 = document.getElementById('liveGraph3').getContext('2d');
+    const ctx4 = document.getElementById('liveGraph4').getContext('2d');
+
+    const liveGraph1 = new Chart(ctx1, {
         type: 'line',
         data: {
             labels: initialLabels,
             datasets: [{
-                label: 'Temperature (Fahrenheit)',
-                data: initialData,
+                label: 'Cylinder 1 Temperature',
+                data: initialData.cylinder1,
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1
             }]
@@ -41,25 +52,115 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    async function updateGraph(temperature) {
+    const liveGraph2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: initialLabels,
+            datasets: [{
+                label: 'Cylinder 2 Temperature',
+                data: initialData.cylinder2,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+
+    const liveGraph3 = new Chart(ctx3, {
+        type: 'line',
+        data: {
+            labels: initialLabels,
+            datasets: [{
+                label: 'Cylinder 3 Temperature',
+                data: initialData.cylinder3,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+
+    const liveGraph4 = new Chart(ctx4, {
+        type: 'line',
+        data: {
+            labels: initialLabels,
+            datasets: [{
+                label: 'Cylinder 4 Temperature',
+                data: initialData.cylinder4,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+
+    // Create liveGraph2, liveGraph3, and liveGraph4 with the same structure as liveGraph1
+
+    async function updateGraphs(cylinder1,cylinder2,cylinder3,cylinder4) {
         const now = new Date();
         const label = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
-        initialData.shift();
-        initialData.push(temperature);
+        initialData.cylinder1.shift();
+        initialData.cylinder1.push(cylinder1);
 
-        liveGraph.data.labels.shift();
-        liveGraph.data.labels.push(label);
+        initialData.cylinder2.shift();
+        initialData.cylinder2.push(cylinder2);
 
-        liveGraph.data.datasets.forEach((dataset) => {
-            dataset.data = [...initialData];
+        initialData.cylinder3.shift();
+        initialData.cylinder3.push(cylinder3);
+
+        initialData.cylinder4.shift();
+        initialData.cylinder4.push(cylinder4);
+
+        liveGraph1.data.labels.shift();
+        liveGraph1.data.labels.push(label);
+
+        liveGraph2.data.labels.shift();
+        liveGraph2.data.labels.push(label);
+
+        liveGraph3.data.labels.shift();
+        liveGraph3.data.labels.push(label);
+
+        liveGraph4.data.labels.shift();
+        liveGraph4.data.labels.push(label);
+
+        liveGraph1.data.datasets.forEach((dataset) => {
+            dataset.data = [...initialData.cylinder1];
         });
 
-        liveGraph.update();
-    }
+        liveGraph2.data.datasets.forEach((dataset) => {
+            dataset.data = [...initialData.cylinder2];
+        });
 
-    // update when we recieve a packet brah
-    window.electronAPI.onTemperatureUpdate((event, temperature) => {
-        updateGraph(temperature);
-    });
+        liveGraph3.data.datasets.forEach((dataset) => {
+            dataset.data = [...initialData.cylinder3];
+        });
+
+        liveGraph4.data.datasets.forEach((dataset) => {
+            dataset.data = [...initialData.cylinder4];
+        });
+
+        liveGraph1.update();
+        liveGraph2.update();
+        liveGraph3.update();
+        liveGraph4.update();
+    }
 });

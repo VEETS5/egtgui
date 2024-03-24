@@ -1,7 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const dgram = require('dgram');
+
+// server used for receiving
 const udpServer = dgram.createSocket('udp4');
+// client used for sending 
 const udpClient = dgram.createSocket('udp4');
 
 let mainWindow;
@@ -58,18 +61,31 @@ udpServer.on('error', (err) => {
 });
 
 udpServer.on('message', (msg, rinfo) => {
-    console.log(`UDP Server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
-    const temperature = parseFloat(msg.toString());
-    console.log('Received temperature:', temperature);
+    console.log(`UDP Server got: ${msg.toString('hex')} from ${rinfo.address}:${rinfo.port}`);
+    
+    // Ensure the message is at least 16 bytes (4 bytes per temperature * 4 temperatures)
+    if (msg.length >= 16) {
+        // Decode each 32-bit float (IEEE 754, big endian)
+        const cylinder1 = msg.readFloatBE(0);  // First temperature
+        const cylinder2 = msg.readFloatBE(4);  // Second temperature
+        const cylinder3 = msg.readFloatBE(8);  // Third temperature
+        const cylinder4 = msg.readFloatBE(12); // Fourth temperature
 
-    if (mainWindow) {
-        mainWindow.webContents.send('udp-temperature', temperature);
+        console.log(`Received temperatures (decoded): ${cylinder1}, ${cylinder2}, ${cylinder3}, ${cylinder4}`);
+
+        if (mainWindow) {
+            mainWindow.webContents.send('udp-temperature', {cylinder1, cylinder2, cylinder3, cylinder4});
+        }
+    } else {
+        console.error('Received packet is smaller than expected for 4 temperatures.');
     }
 });
+
+
 
 udpServer.on('listening', () => {
     const address = udpServer.address();
     console.log(`UDP Server listening on ${address.address}:${address.port}`);
 });
 
-udpServer.bind(3001, '192.168.1.5');
+udpServer.bind(55151, '192.168.1.5');
