@@ -20,29 +20,78 @@
             flex: 2;
             padding: 20px;
         }
-        #status-icon {
-            width: 50px; 
-            height: auto;
-            position: absolute;
-            top: 10px;
-            left: 10px;
+        #graph-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 20px;
+        }
+
+        #graph-container > div {
+            width: 100%;
+            height: 300px; /* Adjust the height as needed */
+        }
+        #cylinder-temps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .cylinder-temp-box {
+            border: 2px solid;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 48%;
+        }
+
+        .cylinder-temp-label {
+            margin: 0;
         }
     </style>
 </head>
 <body>
     <div id="left-panel">
-        <img id="status-icon" src="/egtgui/src/good_status.png"/>
+        <img id="status-icon" src="/egtgui/src/good_status.png" />
         <h1>Configuration</h1>
         <button id="calibrationSetOn">Start Calibration</button>
         <button id="calibrationSetOff">End Calibration</button>
         <p id="info"></p>
+        <h2>Cylinder Temperatures (Celsius)</h2>
+        <div id="cylinder-temps">
+            <div class="cylinder-temp-box" style="border-color: red;">
+                <h2 class="cylinder-temp-label">Cylinder 1:</h2>
+                <p id="cylinder1Temp"></p>
+            </div>
+            <div class="cylinder-temp-box" style="border-color: orange;">
+                <h2 class="cylinder-temp-label">Cylinder 2:</h2>
+                <p id="cylinder2Temp"></p>
+            </div>
+            <div class="cylinder-temp-box" style="border-color: green;">
+                <h2 class="cylinder-temp-label">Cylinder 3:</h2>
+                <p id="cylinder3Temp"></p>
+            </div>
+            <div class="cylinder-temp-box" style="border-color: blue;">
+                <h2 class="cylinder-temp-label">Cylinder 4:</h2>
+                <p id="cylinder4Temp"></p>
+            </div>
+        </div>
     </div>
     <div id="right-panel">
         <h1>Live Data Graphs</h1>
-        <canvas id="liveGraph1"></canvas>
-        <canvas id="liveGraph2"></canvas>
-        <canvas id="liveGraph3"></canvas>
-        <canvas id="liveGraph4"></canvas>
+        <div id="graph-container">
+            <div>
+                <canvas id="liveGraph1"></canvas>
+            </div>
+            <div>
+                <canvas id="liveGraph2"></canvas>
+            </div>
+            <div>
+                <canvas id="liveGraph3"></canvas>
+            </div>
+            <div>
+                <canvas id="liveGraph4"></canvas>
+            </div>
+        </div>
     </div>
 </body>
 </html>

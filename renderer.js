@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Cylinder 1 Temperature',
                 data: initialData.cylinder1,
-                borderColor: 'rgb(75, 192, 192)',
+                borderColor: 'red',
                 tension: 0.1
             }]
         },
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Cylinder 2 Temperature',
                 data: initialData.cylinder2,
-                borderColor: 'rgb(75, 192, 192)',
+                borderColor: 'orange',
                 tension: 0.1
             }]
         },
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Cylinder 3 Temperature',
                 data: initialData.cylinder3,
-                borderColor: 'rgb(75, 192, 192)',
+                borderColor: 'green',
                 tension: 0.1
             }]
         },
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'Cylinder 4 Temperature',
                 data: initialData.cylinder4,
-                borderColor: 'rgb(75, 192, 192)',
+                borderColor: 'blue',
                 tension: 0.1
             }]
         },
@@ -112,11 +112,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Create liveGraph2, liveGraph3, and liveGraph4 with the same structure as liveGraph1
-
     async function updateGraphs(cylinder1,cylinder2,cylinder3,cylinder4) {
         const now = new Date();
         const label = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+
+        document.getElementById('cylinder1Temp').textContent = `Cylinder 1: ${cylinder1.toFixed(2)}°C`;
+        document.getElementById('cylinder2Temp').textContent = `Cylinder 2: ${cylinder2.toFixed(2)}°C`;
+        document.getElementById('cylinder3Temp').textContent = `Cylinder 3: ${cylinder3.toFixed(2)}°C`;
+        document.getElementById('cylinder4Temp').textContent = `Cylinder 4: ${cylinder4.toFixed(2)}°C`;
 
         initialData.cylinder1.shift();
         initialData.cylinder1.push(cylinder1);
