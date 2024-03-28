@@ -66,10 +66,10 @@ udpServer.on('message', (msg, rinfo) => {
     // Ensure the message is at least 16 bytes (4 bytes per temperature * 4 temperatures)
     if (msg.length >= 16) {
         // Decode each 32-bit float (IEEE 754, big endian)
-        const cylinder1 = msg.readFloatBE(0);  // First temperature
-        const cylinder2 = msg.readFloatBE(4);  // Second temperature
-        const cylinder3 = msg.readFloatBE(8);  // Third temperature
-        const cylinder4 = msg.readFloatBE(12); // Fourth temperature
+        const cylinder1 = msg.readFloatLE(0);  // First temperature
+        const cylinder2 = msg.readFloatLE(4);  // Second temperature
+        const cylinder3 = msg.readFloatLE(8);  // Third temperature
+        const cylinder4 = msg.readFloatLE(12); // Fourth temperature
 
         console.log(`Received temperatures (decoded): ${cylinder1}, ${cylinder2}, ${cylinder3}, ${cylinder4}`);
 
