@@ -31,7 +31,7 @@ app.on('window-all-closed', () => {
 
 ipcMain.on('calibration-start', (event) => {
     const message = Buffer.from('1');
-    udpClient.send(message, 2999, '192.168.1.100', (err) => {
+    udpClient.send(message, 55151, '192.168.1.100', (err) => {
         if (err) {
             console.error('Error sending calibration start:', err);
             event.sender.send('calibration-response', 'Failed to start calibration');
@@ -44,7 +44,7 @@ ipcMain.on('calibration-start', (event) => {
 
 ipcMain.on('calibration-end', (event) => {
     const message = Buffer.from('0');
-    udpClient.send(message, 2999, '192.168.1.100', (err) => {
+    udpClient.send(message, 55151, '192.168.1.100', (err) => {
         if (err) {
             console.error('Error sending calibration end:', err);
             event.sender.send('calibration-response', 'Failed to end calibration');
