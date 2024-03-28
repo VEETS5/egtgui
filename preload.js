@@ -6,8 +6,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     endCalibration: () => ipcRenderer.send('calibration-end'),
     onCalibrationResponse: (callback) => ipcRenderer.on('calibration-response', callback),
     onTemperatureUpdate: (callback) => {
-        ipcRenderer.on('udp-temperature', (event, temperature) => {
-            callback(temperature);
+        ipcRenderer.on('udp-temperature', (_, data) => {
+            callback(data);
         });
     },
 });

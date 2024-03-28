@@ -12,12 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('info').textContent = message;
     });
 
-    window.electronAPI.onTemperatureUpdate((event, data) => {
-        const { cylinder1, cylinder2, cylinder3, cylinder4 } = data;
+    window.electronAPI.onTemperatureUpdate(({ cylinder1, cylinder2, cylinder3, cylinder4 }) => {
         console.log('Received temperatures:', cylinder1, cylinder2, cylinder3, cylinder4);
         updateGraphs(cylinder1, cylinder2, cylinder3, cylinder4);
     });
-
+    
     const initialDataCount = 15;
     const initialData = {
         cylinder1: Array(initialDataCount).fill(0),
