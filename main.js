@@ -30,7 +30,7 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on('calibration-start', (event) => {
-    const message = Buffer.from('1');
+    const message = Buffer.from([1]);
     udpClient.send(message, 55151, '192.168.1.100', (err) => {
         if (err) {
             console.error('Error sending calibration start:', err);
@@ -43,7 +43,7 @@ ipcMain.on('calibration-start', (event) => {
 });
 
 ipcMain.on('calibration-end', (event) => {
-    const message = Buffer.from('0');
+    const message = Buffer.from([0]);
     udpClient.send(message, 55151, '192.168.1.100', (err) => {
         if (err) {
             console.error('Error sending calibration end:', err);
