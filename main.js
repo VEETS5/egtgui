@@ -88,4 +88,4 @@ udpServer.on('listening', () => {
     console.log(`UDP Server listening on ${address.address}:${address.port}`);
 });
 
-udpServer.bind(55151, '192.168.1.5');
+udpServer.bind(55151, '192.168.1.100');
